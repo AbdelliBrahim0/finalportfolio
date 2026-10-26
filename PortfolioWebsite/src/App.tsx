@@ -14,6 +14,40 @@ function App() {
   const mainRef = useRef<HTMLElement>(null)
   const cursorRevealRef = useRef<HTMLDivElement>(null)
   const [revealActive, setRevealActive] = useState(false)
+  const [navbarBrand, setNavbarBrand] = useState('')
+
+  useEffect(() => {
+    const labels = ['portfolio', 'Abdelli Brahim']
+    let labelIndex = 0
+    let characterIndex = 0
+    let deleting = false
+    let timeout: number
+
+    const type = () => {
+      const label = labels[labelIndex]
+      if (!deleting) {
+        characterIndex += 1
+        setNavbarBrand(label.slice(0, characterIndex))
+        if (characterIndex === label.length) {
+          deleting = true
+          timeout = window.setTimeout(type, 1800)
+          return
+        }
+      } else {
+        characterIndex -= 1
+        setNavbarBrand(label.slice(0, characterIndex))
+        if (characterIndex === 0) {
+          deleting = false
+          labelIndex = (labelIndex + 1) % labels.length
+        }
+      }
+
+      timeout = window.setTimeout(type, deleting ? 55 : 105)
+    }
+
+    timeout = window.setTimeout(type, 300)
+    return () => window.clearTimeout(timeout)
+  }, [])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -233,8 +267,10 @@ function App() {
     <>
       <nav className="squishy-navbar" aria-label="Main navigation">
         <a className="squishy-navbar__brand" href="#" aria-label="Abdelli Brahim home">
-          <span className="squishy-navbar__brand-mark">A</span>
-          <span>ABDELLI</span>
+          <span className="squishy-navbar__brand-text">
+            {navbarBrand}
+            <span className="squishy-navbar__caret" aria-hidden="true" />
+          </span>
         </a>
         <div className="squishy-navbar__links">
           <a href="#about">About</a>
