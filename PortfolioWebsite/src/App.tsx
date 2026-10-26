@@ -40,49 +40,66 @@ function App() {
       const scale = Math.min(
         width / image.naturalWidth,
         height / image.naturalHeight,
-      )
+      ) * 0.9
       const drawWidth = image.naturalWidth * scale
       const drawHeight = image.naturalHeight * scale
       const imageX = (width - drawWidth) / 2
-      const imageY = (height - drawHeight) / 2
+      const imageY = height - drawHeight
       const leftGap = imageX
       const rightGap = width - imageX - drawWidth
-      const leftMirrorWidth = Math.min(image.naturalWidth, leftGap / scale)
-      const rightMirrorWidth = Math.min(image.naturalWidth, rightGap / scale)
-
       context.clearRect(0, 0, width, height)
       if (leftGap > 0) {
         context.save()
+        context.beginPath()
+        context.rect(0, 0, leftGap, height)
+        context.clip()
         context.translate(imageX, 0)
         context.scale(-1, 1)
-        context.drawImage(
-          image,
-          0,
-          0,
-          leftMirrorWidth,
-          image.naturalHeight,
-          0,
-          imageY,
-          leftGap,
-          drawHeight,
-        )
+        context.drawImage(image, 0, imageY, drawWidth, drawHeight)
         context.restore()
       }
 
       if (rightGap > 0) {
         context.save()
+        context.beginPath()
+        context.rect(imageX + drawWidth, 0, rightGap, height)
+        context.clip()
         context.translate(imageX + drawWidth, 0)
         context.scale(-1, 1)
+        context.drawImage(image, -drawWidth, imageY, drawWidth, drawHeight)
+        context.restore()
+      }
+
+      if (imageY > 0) {
+        context.save()
+        context.beginPath()
+        context.rect(0, 0, width, imageY)
+        context.clip()
+        context.translate(0, imageY * 2)
+        context.scale(1, -1)
+        context.drawImage(image, 0, imageY, image.naturalWidth, image.naturalHeight, 0, imageY, width, drawHeight)
+        context.restore()
+      }
+
+      const bottomGap = height - imageY - drawHeight
+      if (bottomGap > 0) {
+        context.save()
+        context.beginPath()
+        context.rect(0, imageY + drawHeight, width, bottomGap)
+        context.clip()
+        const bottomTop = imageY + drawHeight
+        context.translate(0, bottomTop + bottomGap)
+        context.scale(1, -1)
         context.drawImage(
           image,
-          image.naturalWidth - rightMirrorWidth,
           0,
-          rightMirrorWidth,
+          0,
+          image.naturalWidth,
           image.naturalHeight,
-          -rightGap,
-          imageY,
-          rightGap,
-          drawHeight,
+          0,
+          0,
+          width,
+          bottomGap,
         )
         context.restore()
       }
@@ -214,6 +231,21 @@ function App() {
 
   return (
     <>
+      <nav className="squishy-navbar" aria-label="Main navigation">
+        <a className="squishy-navbar__brand" href="#" aria-label="Abdelli Brahim home">
+          <span className="squishy-navbar__brand-mark">A</span>
+          <span>ABDELLI</span>
+        </a>
+        <div className="squishy-navbar__links">
+          <a href="#about">About</a>
+          <a href="#work">Work</a>
+          <a href="#contact">Contact</a>
+        </div>
+        <a className="squishy-navbar__cta" href="#contact">
+          <span className="squishy-navbar__status-dot" aria-hidden="true" />
+          Let&apos;s talk
+        </a>
+      </nav>
       <main ref={mainRef} className="scroll-scene relative min-h-[500vh] bg-black">
       <canvas
         ref={canvasRef}
@@ -291,7 +323,7 @@ function App() {
         />
       </div>
       </main>
-      <section className="about-section" aria-label="About">
+      <section id="about" className="about-section" aria-label="About">
         <ScrollReveal
           containerClassName="about-section__reveal"
           textClassName="about-section__text"
@@ -307,7 +339,7 @@ function App() {
           baseOffset={0}
           enableBlur={false}
           blurStrength={4}
-          wordAnimationEnd="bottom 40%"
+          wordAnimationEnd="bottom 20%"
         >
           From responsive frontends and model training pipelines to backend architectures and cloud infrastructure, my 360° view of the software lifecycle enables me to design intelligent, end-to-end ecosystems. Versatile by nature and rigorous in my approach, I transform raw data into scalable, robust, and maintainable applications.
         </ScrollReveal>
