@@ -1,0 +1,46 @@
+.interactive-icon-cloud {
+  position: relative;
+  width: min(31vw, 25rem);
+  height: min(30vh, 19rem);
+  color: #8eeaff;
+  pointer-events: auto;
+}
+
+.interactive-icon-cloud__frame {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.interactive-icon-cloud__frame canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.interactive-icon-cloud__loading {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: monospace;
+  letter-spacing: 0.22em;
+  white-space: nowrap;
+}
+
+.interactive-icon-cloud__loading {
+  top: 50%;
+  color: rgb(142 234 255 / 62%);
+  font-size: 0.65rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .interactive-icon-cloud__frame {
+    pointer-events: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .interactive-icon-cloud {
+    width: 58vw;
+    height: 24vh;
+  }
+}

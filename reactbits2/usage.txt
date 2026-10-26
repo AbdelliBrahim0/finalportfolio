@@ -1,0 +1,20 @@
+import ScrollReveal from './ScrollReveal';
+
+<ScrollReveal
+  highlightColor="#3b82f6"
+  mode="scrub"
+  splitBy="chars"
+  effect="flip"
+  stagger={0.012}
+  duration={0.8}
+  smoothing={0.3}
+  baseOpacity={0}
+  baseRotation={0}
+  baseOffset={0}
+  enableBlur={false}
+  blurStrength={4}
+>
+  When does a man die? When he is hit by a bullet? No! When he suffers a disease?
+  No! When he ate a soup made out of a poisonous mushroom?
+  No! A man dies when he is forgotten!
+</ScrollReveal>

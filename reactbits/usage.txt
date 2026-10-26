@@ -1,0 +1,23 @@
+import Lanyard from './Lanyard';
+
+<div style={{ width: '100%', height: '600px' }}>
+  <Lanyard frontImage="/card-front.png" backImage="/card-back.png" strapImage="/band.png"
+  imageFit="cover"
+  cardColor="#ffffff"
+  orientation="portrait"
+  finish="glossy"
+  cornerRadius={0.3}
+  size={0.6}
+  anchor="center"
+  strapLength={0.5}
+  strapColor="#111111"
+  strapWidth={0.65}
+  metal="silver"
+  gravity={1}
+  damping={0.5}
+  elasticity={0.5}
+  breeze={0.5}
+  interactive
+  intro
+/>
+</div>

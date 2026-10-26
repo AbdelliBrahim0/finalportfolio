@@ -1,0 +1,171 @@
+You are given a task to integrate an existing React component in the codebase
+
+The codebase should support:
+- shadcn project structure  
+- Tailwind CSS
+- Typescript
+
+If it doesn't, provide instructions on how to setup project via shadcn CLI, install Tailwind or Typescript.
+
+Determine the default path for components and styles. 
+If default path for components is not /components/ui, provide instructions on why it's important to create this folder
+Copy-paste this component to /components/ui folder:
+```tsx
+interactive-icon-cloud.tsx
+"use client"
+
+import { useEffect, useMemo, useState } from "react"
+import { useTheme } from "next-themes"
+import {
+  Cloud,
+  fetchSimpleIcons,
+  ICloud,
+  renderSimpleIcon,
+  SimpleIcon,
+} from "react-icon-cloud"
+
+export const cloudProps: Omit<ICloud, "children"> = {
+  containerProps: {
+    style: {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      width: "100%",
+      paddingTop: 40,
+    },
+  },
+  options: {
+    reverse: true,
+    depth: 1,
+    wheelZoom: false,
+    imageScale: 2,
+    activeCursor: "default",
+    tooltip: "native",
+    initial: [0.1, -0.1],
+    clickToFront: 500,
+    tooltipDelay: 0,
+    outlineColour: "#0000",
+    maxSpeed: 0.04,
+    minSpeed: 0.02,
+    // dragControl: false,
+  },
+}
+
+export const renderCustomIcon = (icon: SimpleIcon, theme: string) => {
+  const bgHex = theme === "light" ? "#f3f2ef" : "#080510"
+  const fallbackHex = theme === "light" ? "#6e6e73" : "#ffffff"
+  const minContrastRatio = theme === "dark" ? 2 : 1.2
+
+  return renderSimpleIcon({
+    icon,
+    bgHex,
+    fallbackHex,
+    minContrastRatio,
+    size: 42,
+    aProps: {
+      href: undefined,
+      target: undefined,
+      rel: undefined,
+      onClick: (e: any) => e.preventDefault(),
+    },
+  })
+}
+
+export type DynamicCloudProps = {
+  iconSlugs: string[]
+}
+
+type IconData = Awaited<ReturnType<typeof fetchSimpleIcons>>
+
+export function IconCloud({ iconSlugs }: DynamicCloudProps) {
+  const [data, setData] = useState<IconData | null>(null)
+  const { theme } = useTheme()
+
+  useEffect(() => {
+    fetchSimpleIcons({ slugs: iconSlugs }).then(setData)
+  }, [iconSlugs])
+
+  const renderedIcons = useMemo(() => {
+    if (!data) return null
+
+    return Object.values(data.simpleIcons).map((icon) =>
+      renderCustomIcon(icon, theme || "light"),
+    )
+  }, [data, theme])
+
+  return (
+    // @ts-ignore
+    <Cloud {...cloudProps}>
+      <>{renderedIcons}</>
+    </Cloud>
+  )
+}
+
+
+demo.tsx
+import { IconCloud } from "@/components/ui/interactive-icon-cloud"
+
+const slugs = [
+  "typescript",
+  "javascript",
+  "dart",
+  "java",
+  "react",
+  "flutter",
+  "android",
+  "html5",
+  "css3",
+  "nodedotjs",
+  "express",
+  "nextdotjs",
+  "prisma",
+  "amazonaws",
+  "postgresql",
+  "firebase",
+  "nginx",
+  "vercel",
+  "testinglibrary",
+  "jest",
+  "cypress",
+  "docker",
+  "git",
+  "jira",
+  "github",
+  "gitlab",
+  "visualstudiocode",
+  "androidstudio",
+  "sonarqube",
+  "figma",
+]
+
+export function IconCloudDemo() {
+  return (
+    <div className="relative flex size-full max-w-lg items-center justify-center overflow-hidden rounded-lg border bg-background px-20 pb-20 pt-8 ">
+      <IconCloud iconSlugs={slugs} />
+    </div>
+  )
+}
+
+```
+
+Install NPM dependencies:
+```bash
+next-themes, react-icon-cloud
+```
+
+Implementation Guidelines
+ 1. Analyze the component structure and identify all required dependencies
+ 2. Review the component's argumens and state
+ 3. Identify any required context providers or hooks and install them
+ 4. Questions to Ask
+ - What data/props will be passed to this component?
+ - Are there any specific state management requirements?
+ - Are there any required assets (images, icons, etc.)?
+ - What is the expected responsive behavior?
+ - What is the best place to use this component in the app?
+
+Steps to integrate
+ 0. Copy paste all the code above in the correct directories
+ 1. Install external dependencies
+ 2. Fill image assets with Unsplash stock images you know exist
+ 3. Use lucide-react icons for svgs or logos if component requires them
